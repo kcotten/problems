@@ -42,3 +42,24 @@ func reverseCstyle(s string) string {
 	b[len(s)-1] = '\000'
 	return string(b)
 }
+
+func isAnagram(s1, s2 string) bool {
+	memo := make(map[rune]int)
+	for _, r := range s1 {
+		memo[r]++
+	}
+	for _, r := range s2 {
+		if val, ok := memo[r]; ok {
+			// consume the element
+			if val >= 1 {
+				memo[r]--
+			} else {
+				// we reached an element that has been exhausted
+				return false
+			}
+		} else {
+			return false
+		}
+	}
+	return true
+}

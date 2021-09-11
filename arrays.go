@@ -170,3 +170,33 @@ func combinationSum(candidates []int, target int) [][]int {
 	backtrack(target, 0, combo)
 	return results
 }
+
+// Note: rewrite func to save zeros until end and consider them then
+// otherwise flipped zeros will be considered to be a zero in the original matrix
+// one approach is to make a copy of matrix and change the zeros there
+// while looking at zeros in the original
+func zeroOutMatrix(m [][]int) [][]int {
+	for i := 0; i < len(m); i++ {
+		for j := 0; j < len(m); j++ {
+			if m[i][j] == 0 {
+				m[i] = zeroRow(m[i])
+				m = zeroCol(m, j)
+			}
+		}
+	}
+	return m
+}
+
+func zeroRow(row []int) []int {
+	for i := range row {
+		row[i] = 0
+	}
+	return row
+}
+
+func zeroCol(m [][]int, j int) [][]int {
+	for _, col := range m {
+		col[j] = 0
+	}
+	return m
+}
