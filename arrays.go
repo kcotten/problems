@@ -200,3 +200,35 @@ func zeroCol(m [][]int, j int) [][]int {
 	}
 	return m
 }
+
+func rotate(matrix [][]int) {
+	n := len(matrix[0])
+	for i := 0; i < (n+1)/2; i++ {
+		for j := 0; j < n/2; j++ {
+			t := matrix[n-1-j][i]
+			matrix[n-1-j][i] = matrix[n-1-i][n-j-1]
+			matrix[n-1-i][n-j-1] = matrix[j][n-1-i]
+			matrix[j][n-1-i] = matrix[i][j]
+			matrix[i][j] = t
+		}
+	}
+}
+
+func rotate2(matrix [][]int) {
+	n := len(matrix[0])
+	for i := 0; i < n; i++ {
+		for j := i; j < n; j++ {
+			t := matrix[i][j]
+			matrix[i][j] = matrix[j][i]
+			matrix[j][i] = t
+		}
+	}
+
+	for i := 0; i < n; i++ {
+		for j := 0; j < n/2; j++ {
+			t := matrix[i][j]
+			matrix[i][j] = matrix[i][n-1-j]
+			matrix[i][n-1-j] = t
+		}
+	}
+}
