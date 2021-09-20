@@ -80,7 +80,7 @@ func maxDepth(root *TreeNode) int {
 	return max(depthLeft, depthRight)
 }
 
-func max(l int, r int) int {
+func max(l, r int) int {
 	return int(math.Max(float64(l), float64(r)))
 }
 

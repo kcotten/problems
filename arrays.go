@@ -232,3 +232,57 @@ func rotate2(matrix [][]int) {
 		}
 	}
 }
+
+func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
+	M, N := len(image), len(image[0])
+	color := image[sr][sc]
+	if color == newColor {
+		return image
+	}
+	var dfs func(int, int)
+	dfs = func(r, c int) {
+		if image[r][c] == color {
+			image[r][c] = newColor
+			if r >= 1 {
+				dfs(r-1, c)
+			}
+			if r+1 < M {
+				dfs(r+1, c)
+			}
+			if c >= 1 {
+				dfs(r, c-1)
+			}
+			if c+1 < N {
+				dfs(r, c+1)
+			}
+		}
+	}
+	dfs(sr, sc)
+	return image
+}
+
+func maxAreaOfIsland(grid [][]int) int {
+	M, N := len(grid), len(grid[0])
+	seen := make([][]bool, M)
+	result := 0
+	for i := range grid {
+		seen[i] = make([]bool, N)
+	}
+
+	var area func(int, int) int
+	area = func(r, c int) int {
+		if r < 0 || c < 0 || r >= M || c >= N || grid[r][c] == 0 || seen[r][c] {
+			return 0
+		}
+		seen[r][c] = true
+		return (1 + area(r+1, c) + area(r-1, c) + area(r, c-1) + area(r, c+1))
+	}
+
+	for r := 0; r < M; r++ {
+		for c := 0; c < N; c++ {
+			result = max(result, area(r, c))
+		}
+	}
+
+	return result
+}
