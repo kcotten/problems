@@ -16,6 +16,8 @@ func main() {
 	fmt.Printf("Running Strings Tests\n")
 	fmt.Printf("All Unique: %v\n", unique("hello"))
 	fmt.Printf("All Unique: %v\n", unique("helios"))
+
+	fmt.Println(MAX)
 }
 
 type TreeNode struct {

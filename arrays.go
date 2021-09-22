@@ -286,3 +286,83 @@ func maxAreaOfIsland(grid [][]int) int {
 
 	return result
 }
+
+func updateMatrix(mat [][]int) [][]int {
+	M, N := len(mat), len(mat[0])
+	if M == 0 {
+		return mat
+	}
+	// declare result
+	dist := make([][]int, M)
+	for i := range dist {
+		dist[i] = make([]int, N)
+	}
+	// fill the result with max int - overflow?
+	dist = fill(dist, MAX-100000)
+	// left / up
+	for i := 0; i < M; i++ {
+		for j := 0; j < N; j++ {
+			if mat[i][j] == 0 {
+				dist[i][j] = 0
+			} else {
+				if i > 0 {
+					dist[i][j] = min(dist[i][j], (dist[i-1][j] + 1))
+				}
+				if j > 0 {
+					dist[i][j] = min(dist[i][j], (dist[i][j-1] + 1))
+				}
+			}
+		}
+	}
+	// right / down
+	for i := M - 1; i > -1; i-- {
+		for j := N - 1; j > -1; j-- {
+			if i < M-1 {
+				dist[i][j] = min(dist[i][j], (dist[i+1][j] + 1))
+			}
+			if j < N-1 {
+				dist[i][j] = min(dist[i][j], (dist[i][j+1] + 1))
+			}
+		}
+	}
+
+	return dist
+}
+
+func min(i, j int) int {
+	if i < j {
+		return i
+	}
+	return j
+}
+
+func fill(nums [][]int, a int) [][]int {
+	for i := 0; i < len(nums); i++ {
+		for j := 0; j < len(nums[0]); j++ {
+			nums[i][j] = a
+		}
+	}
+	return nums
+}
+
+// merge intervals with 2d sort example
+func merge(intervals [][]int) [][]int {
+	sort.Slice(intervals, func(i, j int) bool {
+		return intervals[i][0] < intervals[j][0]
+	})
+
+	var res [][]int
+	i := 0
+	for i < len(intervals) {
+		left, right := intervals[i][0], intervals[i][1]
+		j := i + 1
+		for j < len(intervals) && intervals[j][0] <= right {
+			right = max(right, intervals[j][1])
+			j++
+		}
+		res = append(res, []int{left, right})
+		i = j
+	}
+
+	return res
+}

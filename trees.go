@@ -92,35 +92,51 @@ func validPath(n int, edges [][]int, start int, end int) bool {
 		list[edge[0]] = append(list[edge[0]], edge[1])
 		list[edge[1]] = append(list[edge[1]], edge[0])
 	}
-	nodes := make([]int, 0)
+	//nodes := make([]int, 0)
+	nodes := intQueue{}
 	seenset := make(map[int]bool)
 
-	nodes = enqueue(nodes, start)
+	nodes.enqueue(start)
 	seenset[start] = true
 
-	for len(nodes) > 0 {
-		var node int
-		nodes, node = dequeue(nodes)
+	for nodes.Len() > 0 {
+		node := nodes.dequeue()
 		if node == end {
 			return true
 		}
 		for _, v := range list[node] {
 			if _, ok := seenset[v]; !ok {
 				seenset[v] = true
-				nodes = enqueue(nodes, v)
+				nodes.enqueue(v)
 			}
 		}
 	}
 	return false
 }
 
+type intQueue struct {
+	queue  []int
+	length int
+}
+
 // add to back
-func enqueue(nodes []int, n int) []int {
-	return append([]int{n}, nodes...)
+func (i *intQueue) enqueue(n int) []int {
+	i.length += 1
+	return append([]int{n}, i.queue...)
 }
 
 // remove from front
-func dequeue(nodes []int) ([]int, int) {
-	n := nodes[len(nodes)-1]
-	return nodes[:len(nodes)-1], n
+func (i *intQueue) dequeue() int {
+	n := i.queue[i.length-1]
+	i.queue = i.queue[:i.length-1]
+	i.length -= 1
+	return n
+}
+
+func (i *intQueue) Len() int {
+	return i.length
+}
+
+func (i *intQueue) setLength(l int) {
+	i.length = l
 }
