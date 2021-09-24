@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"math"
 	"reflect"
 	"sort"
 )
@@ -365,4 +367,95 @@ func merge(intervals [][]int) [][]int {
 	}
 
 	return res
+}
+
+func exist(board [][]byte, word string) bool {
+	ret := false
+	size := len(word)
+	M, N := len(board), len(board[0])
+	directions := [][]int{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}
+
+	var dfs func(int, int, int) bool
+	dfs = func(i, j, length int) bool {
+		if length == size {
+			return true
+		}
+		if i < 0 || j < 0 || i >= M || j >= N || board[i][j] != word[length] {
+			return false
+		}
+		// seed the board behind us to prevent following the same path
+		temp := board[i][j]
+		board[i][j] = '0'
+		for _, dir := range directions {
+			ret = ret || dfs(i+dir[0], j+dir[1], length+1)
+		}
+		board[i][j] = temp
+		return ret
+	}
+
+	for i := 0; i < M; i++ {
+		for j := 0; j < N; j++ {
+			if board[i][j] == word[0] {
+				if dfs(i, j, 0) {
+					return true
+				}
+			}
+		}
+	}
+	return false
+}
+
+// reverse an integer
+func reverse(x int) int {
+	max := powInt(2, 31)
+	fmt.Println(max)
+	if x < 0 {
+		z := x * -1
+		ints := intToSlice(z)
+		ret := sliceToInt(ints) * -1
+		if ret < max*-1 {
+			return 0
+		} else {
+			return ret
+		}
+	} else {
+		ints := intToSlice(x)
+		ret := sliceToInt(ints)
+		if ret > (max - 1) {
+			return 0
+		} else {
+			return ret
+		}
+	}
+}
+
+func intToSlice(n int) []int {
+	ret := make([]int, 0)
+	for n > 0 {
+		ret = append(ret, n%10)
+		n /= 10
+	}
+	return ret
+}
+
+func sliceToInt(s []int) int {
+	ret := 0
+	pow := 1
+	for i := len(s) - 1; i >= 0; i-- {
+		ret += s[i] * pow
+		pow *= 10
+	}
+	return ret
+}
+
+func powInt(x, y int) int {
+	return int(math.Pow(float64(x), float64(y)))
+}
+
+func reverseSlice(nums []int) []int {
+	n := len(nums)
+	for i := 0; i <= n/2; i++ {
+		nums[i], nums[n-1-i] = nums[n-i-1], nums[i]
+	}
+	return nums
 }
