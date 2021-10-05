@@ -459,3 +459,62 @@ func reverseSlice(nums []int) []int {
 	}
 	return nums
 }
+
+var stacks []int
+
+type stack struct {
+	index int
+	empty bool
+}
+
+func (s *stack) New(idx int) {
+	s.index = idx
+	s.empty = true
+}
+
+// three stacks using a single array
+func threeStacks() {
+	stacks = make([]int, 3)
+	// one, two, three: keep track of the top of the stack
+	// when stack 0 is updated increment 1 and 2
+	// stack 1 push then increment 2
+	stack0 := new(stack)
+	stack1 := new(stack)
+	stack2 := new(stack)
+	stack0.New(0)
+	stack1.New(1)
+	stack2.New(2)
+	fmt.Println(stack0, stack1, stack2)
+	// push to 0
+	if ok := stack0.threePush(1); ok {
+		stack1.index++
+		stack2.index++
+	}
+	if ok := stack0.threePush(3); ok {
+		stack1.index++
+		stack2.index++
+	}
+	if ok := stack1.threePush(4); ok {
+		stack2.index++
+	}
+	stack2.threePush(7)
+	fmt.Println(stacks)
+}
+
+func (s *stack) threePush(value int) bool {
+	if s.empty {
+		s.empty = !s.empty
+		stacks[s.index] = value
+		return false
+	} else {
+		stacks = append(stacks[:s.index+1], stacks[s.index:]...)
+		stacks[s.index] = value
+		return true
+	}
+}
+
+func (s *stack) threePop() int {
+	ret := stacks[s.index]
+	stacks = append(stacks[:s.index], stacks[s.index+1:]...)
+	return ret
+}
