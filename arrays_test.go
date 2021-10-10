@@ -92,12 +92,92 @@ func Test_threeStacks(t *testing.T) {
 	tests := []struct {
 		name string
 	}{
-		// TODO: Add test cases.
 		{"test"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			threeStacks()
+		})
+	}
+}
+
+func Test_rotate2(t *testing.T) {
+	type args struct {
+		matrix [][]int
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		{
+			"test",
+			args{
+				[][]int{
+					{1, 2, 3},
+					{4, 5, 6},
+					{7, 8, 9},
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			rotate2(tt.args.matrix)
+		})
+	}
+}
+
+func Test_isCryptSolution(t *testing.T) {
+	type args struct {
+		crypt    []string
+		solution [][]string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			"test",
+			args{
+				[]string{
+					"SEND",
+					"MORE",
+					"MONEY",
+				},
+				[][]string{
+					{"O", "0"},
+					{"M", "1"},
+					{"Y", "2"},
+					{"E", "5"},
+					{"N", "6"},
+					{"D", "7"},
+					{"R", "8"},
+					{"S", "9"},
+				},
+			},
+			true,
+		},
+		{
+			"test2",
+			args{
+				[]string{
+					"A",
+					"A",
+					"A",
+				},
+				[][]string{
+					{"A", "0"},
+				},
+			},
+			true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := isCryptSolution(tt.args.crypt, tt.args.solution); got != tt.want {
+				t.Errorf("isCryptSolution() = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }

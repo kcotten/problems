@@ -5,6 +5,8 @@ import (
 	"math"
 	"reflect"
 	"sort"
+	"strconv"
+	"strings"
 )
 
 // Pascal's triangle
@@ -225,7 +227,7 @@ func rotate2(matrix [][]int) {
 			matrix[j][i] = t
 		}
 	}
-
+	fmt.Println(matrix)
 	for i := 0; i < n; i++ {
 		for j := 0; j < n/2; j++ {
 			t := matrix[i][j]
@@ -233,6 +235,7 @@ func rotate2(matrix [][]int) {
 			matrix[i][n-1-j] = t
 		}
 	}
+	fmt.Println(matrix)
 }
 
 func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
@@ -517,4 +520,65 @@ func (s *stack) threePop() int {
 	ret := stacks[s.index]
 	stacks = append(stacks[:s.index], stacks[s.index+1:]...)
 	return ret
+}
+
+// crypt[0] + crypt[1] = crypt[2] using mapping in solution
+// no leading zeros
+func isCryptSolution(crypt []string, solution [][]string) bool {
+	sol := make(map[string]string, len(solution))
+	res := make(map[string]string, len(solution))
+	val1, val2 := "", ""
+	for _, v := range solution {
+		sol[v[0]] = v[1]
+		res[v[1]] = v[0]
+	}
+
+	for _, v := range crypt[0] {
+		s := string(v)
+		val1 = val1 + sol[s]
+	}
+	for _, v := range crypt[1] {
+		s := string(v)
+		val2 = val2 + sol[s]
+	}
+	if !(checkLeading(val1) && checkLeading(val2)) {
+		return false
+	}
+	fmt.Println(val1, val2)
+	i, _ := strconv.Atoi(val1)
+	j, _ := strconv.Atoi(val2)
+	fmt.Println(i, j)
+	// result as a string of ints
+	result := strconv.Itoa(i + j)
+	fmt.Println(result)
+	if len(result) != len(crypt[2]) {
+		return false
+	}
+	for i, r := range result {
+		s := string(r)
+		s2 := string(crypt[2][i])
+		if sol[s2] != s {
+			return false
+		}
+	}
+
+	return true
+}
+
+func checkLeading(s string) bool {
+	if len(s) == 1 {
+		return true
+	}
+	t := strings.TrimLeft(s, "0")
+	return t == s
+}
+
+// 0 <= index <= len(a)
+func insert(a []int, index int, value int) []int {
+	if len(a) == index { // nil or empty slice or after last element
+		return append(a, value)
+	}
+	a = append(a[:index+1], a[index:]...) // index < len(a)
+	a[index] = value
+	return a
 }
