@@ -181,3 +181,24 @@ func Test_isCryptSolution(t *testing.T) {
 		})
 	}
 }
+
+func Test_maxProfit(t *testing.T) {
+	type args struct {
+		prices []int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{"Test", args{[]int{1, 2, 3, 0, 2}}, 3},
+		{"Test2", args{[]int{48, 12, 60, 93, 97, 42, 25, 64, 17, 56, 85, 93, 9, 48, 52, 42, 58, 85, 81, 84, 69, 36, 1, 54, 23, 15, 72, 15, 11, 94}}, 428},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := maxProfit(tt.args.prices); got != tt.want {
+				t.Errorf("maxProfit() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

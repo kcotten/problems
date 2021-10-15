@@ -582,3 +582,36 @@ func insert(a []int, index int, value int) []int {
 	a[index] = value
 	return a
 }
+
+func maxProfit(prices []int) int {
+	// idx or time to a profit???
+	memo := make(map[int]int)
+	var maxp func(int, bool) int
+	maxp = func(idx int, hasStock bool) int {
+		if idx >= len(prices) {
+			return 0
+		}
+		// create hashkey ourselves
+		key := idx << 16
+		if hasStock {
+			// unique key if have stock
+			key |= 1
+		}
+		if val, ok := memo[key]; ok {
+			return val
+		}
+		// hold
+		maxP := maxp(idx+1, hasStock)
+		if hasStock {
+			// sell stock, add cooldown, hasStock = false
+			maxP = max(maxP, prices[idx]+maxp(idx+2, false))
+		} else {
+			// buy stock, hasStock = true
+			maxP = max(maxP, -prices[idx]+maxp(idx+1, true))
+		}
+
+		memo[key] = maxP
+		return maxP
+	}
+	return maxp(0, false)
+}

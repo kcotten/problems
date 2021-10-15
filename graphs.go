@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type pair struct {
 	i, j int
 }
@@ -77,4 +79,45 @@ func enqueue(q []pair, v pair) []pair {
 func dequeue(q []pair) ([]pair, pair) {
 	v := q[0]
 	return q[1:], v
+}
+
+func canFinish(num int, prereq [][]int) bool {
+	// memoize the courses with their dependencies (adjacencies)
+	memo := make(map[int][]int)
+	for _, v := range prereq {
+		// revisit
+		if val, ok := memo[v[1]]; ok {
+			memo[v[1]] = append(val, v[0])
+		} else {
+			memo[v[1]] = append(val, v[0])
+		}
+	}
+	fmt.Println(memo)
+	path := make([]bool, num)
+	for current := 0; current < num; current++ {
+		if isCyclic(current, memo, path) {
+			return false
+		}
+	}
+
+	return true
+}
+
+func isCyclic(current int, memo map[int][]int, path []bool) bool {
+	if path[current] {
+		return true
+	}
+	if _, ok := memo[current]; !ok {
+		return false
+	}
+	path[current] = true
+
+	ret := false
+	for _, v := range memo[current] {
+		if ret = isCyclic(v, memo, path); ret {
+			break
+		}
+	}
+	path[current] = false
+	return ret
 }
