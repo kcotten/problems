@@ -27,3 +27,15 @@ func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 	}
 	return l3
 }
+
+func reverseList(head *ListNode) *ListNode {
+	var prev, curr *ListNode
+	curr = head
+	for curr != nil {
+		t := curr.Next
+		curr.Next = prev
+		prev = curr
+		curr = t
+	}
+	return prev
+}

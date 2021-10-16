@@ -615,3 +615,53 @@ func maxProfit(prices []int) int {
 	}
 	return maxp(0, false)
 }
+
+func isIsomorphic(s string, t string) bool {
+	chars1 := make([]int, 128)
+	chars2 := make([]int, 128)
+	for i := len(chars1) - 1; i >= 0; i-- {
+		chars1[i] = -1
+		chars2[i] = -1
+	}
+	for i := 0; i < len(s); i++ {
+		c1, c2 := int(s[i]), int(t[i])
+
+		if chars1[c1] == -1 && chars2[c2] == -1 {
+			chars1[c1] = c2
+			chars2[c2] = c1
+		} else if !(chars1[c1] == c2 && chars2[c2] == c1) {
+			return false
+		}
+	}
+	return true
+}
+
+func findPeakElement(nums []int) int {
+	left, right := 0, len(nums)-1
+	for left < right {
+		mid := (left + right) / 2
+		if nums[mid] > nums[mid+1] {
+			right = mid
+		} else {
+			left = mid + 1
+		}
+	}
+	return left
+}
+
+func peakIndexInMountainArray(nums []int) int {
+	left, right := 0, len(nums)-1
+	for left < right {
+		mid := (left + right) / 2
+		if nums[mid] > nums[mid+1] && nums[mid] > nums[mid-1] {
+			return mid
+		}
+		if nums[mid] < nums[mid-1] {
+			right = mid
+		}
+		if nums[mid] < nums[mid+1] {
+			left = mid
+		}
+	}
+	return left
+}
