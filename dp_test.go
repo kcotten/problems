@@ -1,6 +1,8 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 func Test_knapsack(t *testing.T) {
 	type args struct {
@@ -29,6 +31,27 @@ func Test_knapsack(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := knapsack(tt.args.profits, tt.args.weights, tt.args.capacity, tt.args.idx); got != tt.want {
 				t.Errorf("knapsack() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_wordBreak(t *testing.T) {
+	type args struct {
+		s        string
+		wordDict []string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{"Test", args{"leetcode", []string{"leet", "code"}}, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := wordBreak(tt.args.s, tt.args.wordDict); got != tt.want {
+				t.Errorf("wordBreak() = %v, want %v", got, tt.want)
 			}
 		})
 	}
