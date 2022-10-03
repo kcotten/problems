@@ -39,3 +39,19 @@ func reverseList(head *ListNode) *ListNode {
 	}
 	return prev
 }
+
+func deleteDuplicates(head *ListNode) *ListNode {
+	l := head
+	if head == nil || head.Next == nil {
+		return head
+	} else {
+		for l.Next != nil {
+			if l.Next.Val == l.Val {
+				l.Next = l.Next.Next
+			} else {
+				l = l.Next
+			}
+		}
+	}
+	return head
+}

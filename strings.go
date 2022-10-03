@@ -63,3 +63,23 @@ func isAnagram(s1, s2 string) bool {
 	}
 	return true
 }
+
+// is s a subsequence of t, like a substring but not contiguous
+func isSubsequence(s string, t string) bool {
+	if len(s) == 0 {
+		return true
+	}
+	if len(t) == 0 {
+		return false
+	}
+	j := 0
+	for i := 0; i < len(t); i++ {
+		if t[i] == s[j] {
+			j++
+			if j == len(s) {
+				return true
+			}
+		}
+	}
+	return false
+}

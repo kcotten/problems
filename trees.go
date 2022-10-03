@@ -140,3 +140,28 @@ func (i *intQueue) Len() int {
 func (i *intQueue) setLength(l int) {
 	i.length = l
 }
+
+// in-order:   left, current, right
+// pre-order:  current, left, right
+// post-order: left, right, current
+// insert:     if val > curr ? right : left
+func dfs(root *TreeNode) {
+	if root == nil {
+		return
+	}
+	// do something
+	dfs(root.Left)
+	dfs(root.Right)
+}
+
+// determine if path exists in tree adding to sum
+func hasPathSum(root *TreeNode, sum int) bool {
+	if root == nil {
+		return false
+	}
+	sum -= root.Val
+	if sum == 0 && root.Left == nil && root.Right == nil {
+		return true
+	}
+	return hasPathSum(root.Left, sum) || hasPathSum(root.Right, sum)
+}
